@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31521.260
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0 - Domain", "0 - Domain", "{C69ECB00-08F6-4AEE-983A-9FB9E1C16CDD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Infra", "1 - Infra", "{AE33DB96-A73D-4ECE-8DD5-66829F712B1F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - API", "2 - API", "{2991AED9-CD13-4234-8FE0-84F238AB6CDE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestaoPatrimonial.Domain", "GestaoPatrimonial.Domain\GestaoPatrimonial.Domain.csproj", "{25B70254-2E07-47C7-AA20-66031B8F9F74}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestaoPatrimonial.Data", "GestaoPatrimonial.Infra\GestaoPatrimonial.Data.csproj", "{C76D0235-B2B4-4DA0-B0F9-C0A612E430FF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestaoPatrimonial.API", "GestaoPatrimonial.API\GestaoPatrimonial.API.csproj", "{3C18313B-50CD-479C-A35E-F95D597DA57C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestaoPatrimonial.Application", "GestaoPatrimonial.Application\GestaoPatrimonial.Application.csproj", "{B1A67EA8-2FFF-4339-BC31-B9CDD657B433}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestaoPatrimonial.IoC", "GestaoPatrimonial.IoC\GestaoPatrimonial.IoC.csproj", "{541E96A5-5CCE-487B-8AD9-DA9FAD74EAF1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{25B70254-2E07-47C7-AA20-66031B8F9F74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25B70254-2E07-47C7-AA20-66031B8F9F74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25B70254-2E07-47C7-AA20-66031B8F9F74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25B70254-2E07-47C7-AA20-66031B8F9F74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C76D0235-B2B4-4DA0-B0F9-C0A612E430FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C76D0235-B2B4-4DA0-B0F9-C0A612E430FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C76D0235-B2B4-4DA0-B0F9-C0A612E430FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C76D0235-B2B4-4DA0-B0F9-C0A612E430FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C18313B-50CD-479C-A35E-F95D597DA57C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C18313B-50CD-479C-A35E-F95D597DA57C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C18313B-50CD-479C-A35E-F95D597DA57C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C18313B-50CD-479C-A35E-F95D597DA57C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1A67EA8-2FFF-4339-BC31-B9CDD657B433}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1A67EA8-2FFF-4339-BC31-B9CDD657B433}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1A67EA8-2FFF-4339-BC31-B9CDD657B433}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1A67EA8-2FFF-4339-BC31-B9CDD657B433}.Release|Any CPU.Build.0 = Release|Any CPU
+		{541E96A5-5CCE-487B-8AD9-DA9FAD74EAF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{541E96A5-5CCE-487B-8AD9-DA9FAD74EAF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{541E96A5-5CCE-487B-8AD9-DA9FAD74EAF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{541E96A5-5CCE-487B-8AD9-DA9FAD74EAF1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{25B70254-2E07-47C7-AA20-66031B8F9F74} = {C69ECB00-08F6-4AEE-983A-9FB9E1C16CDD}
+		{C76D0235-B2B4-4DA0-B0F9-C0A612E430FF} = {AE33DB96-A73D-4ECE-8DD5-66829F712B1F}
+		{3C18313B-50CD-479C-A35E-F95D597DA57C} = {2991AED9-CD13-4234-8FE0-84F238AB6CDE}
+		{B1A67EA8-2FFF-4339-BC31-B9CDD657B433} = {C69ECB00-08F6-4AEE-983A-9FB9E1C16CDD}
+		{541E96A5-5CCE-487B-8AD9-DA9FAD74EAF1} = {AE33DB96-A73D-4ECE-8DD5-66829F712B1F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4200BBF3-C430-40E8-8595-50D3999C3C7F}
+	EndGlobalSection
+EndGlobal
