@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GestaoPatrimonial.API.Models
+namespace GestaoPatrimonial.Domain.Models
 {
     public class LoginModel
     {
