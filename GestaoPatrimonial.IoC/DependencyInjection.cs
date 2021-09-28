@@ -19,9 +19,8 @@ namespace GestaoPatrimonial.IoC
         {
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                                                         b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
-            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
-            services.ConfigureApplicationCookie(options => options.AccessDeniedPath = "/Accont/Login");
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
             services.AddScoped<IAddressRepository, AddressRepository>();
             services.AddScoped<IBrachOfficeRepository, BrachOfficeRepository>();
