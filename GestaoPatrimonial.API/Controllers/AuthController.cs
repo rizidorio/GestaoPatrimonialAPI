@@ -1,5 +1,6 @@
-﻿using GestaoPatrimonial.Domain.Account;
-using GestaoPatrimonial.Domain.Models;
+﻿using GestaoPatrimonial.API.Utils;
+using GestaoPatrimonial.Domain.Account;
+using GestaoPatrimonial.Domain.AuthModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -22,29 +23,17 @@ namespace GestaoPatrimonial.API.Controllers
         [HttpPost]
         [Route("login")]
         [AllowAnonymous]
-        public async Task<ActionResult<UserTokenModel>> Token([FromBody] LoginModel model)
+        public async Task<IActionResult> Token([FromBody] LoginModel model)
         {
-            try
-            {
-                return await _authenticate.Authenticate(model);
-            }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);
-            }
+            return new ResponseController().Response(await _authenticate.Authenticate(model));
         }
 
         [HttpPost]
         [Route("CreateUser")]
         //[ApiExplorerSettings(IgnoreApi = true)]
-        public async Task<IActionResult> CreateUser([FromBody] LoginModel model)
+        public async Task<IActionResult> CreateUser([FromBody] RegisterUserModel model)
         {
-            var result = await _authenticate.RegisterUser(model.Email, model.Password);
-
-            if (result)
-                return Ok("Usuário criado com sucesso");
-
-            return BadRequest("Erro ao criar usuário");
+            return new ResponseController().Response(await _authenticate.RegisterUser(model));
         }
     }
 }

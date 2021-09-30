@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GestaoPatrimonial.API.Models
+namespace GestaoPatrimonial.Domain.AuthModels
 {
-    public class RegisterModel
+    public class RegisterUserModel
     {
         [Required]
         [EmailAddress]

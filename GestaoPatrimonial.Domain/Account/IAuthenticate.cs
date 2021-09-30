@@ -1,12 +1,13 @@
-﻿using GestaoPatrimonial.Domain.Models;
+﻿using GestaoPatrimonial.Domain.AuthModels;
+using GestaoPatrimonial.Domain.Utils.Models;
 using System.Threading.Tasks;
 
 namespace GestaoPatrimonial.Domain.Account
 {
     public interface IAuthenticate
     {
-        Task<UserTokenModel> Authenticate(LoginModel model);
-        Task<bool> RegisterUser(string email, string password);
+        Task<ResponseModel> Authenticate(LoginModel model);
+        Task<ResponseModel> RegisterUser(RegisterUserModel model);
         Task Logout();
     }
 }

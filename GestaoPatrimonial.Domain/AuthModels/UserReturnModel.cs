@@ -1,4 +1,4 @@
-﻿namespace GestaoPatrimonial.Domain.Models
+﻿namespace GestaoPatrimonial.Domain.AuthModels
 {
     public class UserReturnModel
     {

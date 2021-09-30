@@ -1,5 +1,6 @@
 ﻿using GestaoPatrimonial.Domain.Account;
-using GestaoPatrimonial.Domain.Models;
+using GestaoPatrimonial.Domain.AuthModels;
+using GestaoPatrimonial.Domain.Utils.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -24,47 +25,74 @@ namespace GestaoPatrimonial.Data.Identity
             _configuration = configuration;
         }
 
-        public async Task<UserTokenModel> Authenticate(LoginModel login)
+        public async Task<ResponseModel> Authenticate(LoginModel login)
         {
-            ApplicationUser findUser = await _userManager.FindByEmailAsync(login.Email);
-
-            if (findUser != null)
+            try
             {
-                var result = await _signInManager.PasswordSignInAsync(login.Email, login.Password, false, lockoutOnFailure: true);
+                ApplicationUser findUser = await _userManager.FindByEmailAsync(login.Email);
 
-                if (result.Succeeded)
+                if (findUser != null)
                 {
-                    var userToken = GenerateToken(findUser);
+                    var result = await _signInManager.PasswordSignInAsync(login.Email, login.Password, false, lockoutOnFailure: true);
 
-                    findUser.UserName ??= findUser.Email;
+                    if (result.Succeeded)
+                    {
+                        var userToken = GenerateToken(findUser);
 
-                    return new UserTokenModel {
-                        Token = new JwtSecurityTokenHandler().WriteToken(userToken),
-                        User = new UserReturnModel(findUser.Id, findUser.UserName, findUser.Email, findUser.PhoneNumber),
-                        Expiration = userToken.ValidTo,
-                    };
+                        findUser.UserName ??= findUser.Email;
+
+                        UserTokenModel model = new UserTokenModel
+                        {
+                            Token = new JwtSecurityTokenHandler().WriteToken(userToken),
+                            User = new UserReturnModel(findUser.Id, findUser.UserName, findUser.Email, findUser.PhoneNumber),
+                            Expiration = userToken.ValidTo,
+                        };
+
+                        return new ResponseModel(200, model, "Usuário logado com sucesso");
+                    }
+
+                    return new ResponseModel(403, "Usuário ou senha inválido");
                 }
-            }
 
-            throw new ArgumentException("Usuário não encontrado");
+                return new ResponseModel(404, "Usuário não encontrado");
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao logar usuário - {ex.Message}");
+            }
         }
 
-        public async Task<bool> RegisterUser(string email, string password)
+        public async Task<ResponseModel> RegisterUser(RegisterUserModel model)
         {
-            var applicationUser = new ApplicationUser
+            try
             {
-                UserName = email,
-                Email = email,
-            };
+                ApplicationUser findUser = await _userManager.FindByEmailAsync(model.Email);
 
-            var result = await _userManager.CreateAsync(applicationUser, password);
+                if (findUser == null)
+                {
+                    ApplicationUser applicationUser = new ApplicationUser
+                    {
+                        UserName = model.Email,
+                        Email = model.Email,
+                    };
 
-            if (result.Succeeded)
-            {
-                await _signInManager.SignInAsync(applicationUser, isPersistent: false);
+                    var result = await _userManager.CreateAsync(applicationUser, model.Password);
+
+                    if (result.Succeeded)
+                    {
+                        await _signInManager.SignInAsync(applicationUser, isPersistent: false);
+                        return new ResponseModel(201, "Usuário criado com sucesso");
+                    }
+
+                    return new ResponseModel(500, "Erro ao cadastrar usuário");
+                }
+
+                return new ResponseModel(409, "Usuário já cadastrado");
             }
-
-            return result.Succeeded;
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao cadastrar usuário - {ex.Message}");
+            }
         }
 
         public async Task Logout()

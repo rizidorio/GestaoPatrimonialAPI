@@ -4,6 +4,7 @@ using GestaoPatrimonial.Application.CqrsAddress.Queries;
 using GestaoPatrimonial.Application.Dtos;
 using GestaoPatrimonial.Application.Interfaces;
 using GestaoPatrimonial.Domain.Entities;
+using GestaoPatrimonial.Domain.Utils.Models;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -22,88 +23,144 @@ namespace GestaoPatrimonial.Application.Services
             _mediator = mediator;
         }
 
-        public async Task Add(AddressDto addressDto)
+        public async Task<ResponseModel> Add(AddressDto addressDto)
         {
-            AddressCreateCommand addressCreateCommand = _mapper.Map<AddressCreateCommand>(addressDto);
+            try
+            {
+                AddressCreateCommand addressCreateCommand = _mapper.Map<AddressCreateCommand>(addressDto);
 
-            await _mediator.Send(addressCreateCommand);
+                return new ResponseModel(201, await _mediator.Send(addressCreateCommand), "Endereço criado com sucesso");
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao criar endereço - {ex.Message}");
+            }
         }
 
-        public async Task Update(AddressDto addressDto)
+        public async Task<ResponseModel> Update(AddressDto addressDto)
         {
-            AddressUpdateCommand addressUpdateCommand = _mapper.Map<AddressUpdateCommand>(addressDto);
+            try
+            {
+                AddressUpdateCommand addressUpdateCommand = _mapper.Map<AddressUpdateCommand>(addressDto);
 
-            await _mediator.Send(addressUpdateCommand);
+                return new ResponseModel(200, await _mediator.Send(addressUpdateCommand), "Endereço atualizado com sucesso");
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao atualizar endereço - {ex.Message}");
+            }
         }
 
-        public async Task Delete(int? id)
+        public async Task<ResponseModel> Delete(int? id)
         {
-            AddressRemoveCommand addressRemoveCommand = new AddressRemoveCommand(id.Value);
+            try
+            {
+                AddressRemoveCommand addressRemoveCommand = new AddressRemoveCommand(id.Value);
 
-            if (addressRemoveCommand != null)
-                await _mediator.Send(addressRemoveCommand);
+                if (addressRemoveCommand != null)
+                    return new ResponseModel(200, await _mediator.Send(addressRemoveCommand), "Endereço removido com sucesso");
 
-            throw new ArgumentException("Erro ao buscar endereço");
+                return new ResponseModel(500, "Erro ao remover endereço");
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao remover endereço - {ex.Message}");
+            }
         }
 
-        public async Task<IEnumerable<AddressDto>> GetAll()
+        public async Task<ResponseModel> GetAll()
         {
-            GetAddressQuery getAddressQuery = new GetAddressQuery();
+            try
+            {
+                GetAddressQuery getAddressQuery = new GetAddressQuery();
 
-            if (getAddressQuery == null)
-                throw new ArgumentException("Erro ao listar endereços");
+                if (getAddressQuery == null)
+                    return new ResponseModel(500, "Erro ao listar endereços");
 
-            IEnumerable<Address> result = await _mediator.Send(getAddressQuery);
+                IEnumerable<Address> result = await _mediator.Send(getAddressQuery);
 
-            return _mapper.Map<IEnumerable<AddressDto>>(result);
+                return new ResponseModel(200, _mapper.Map<IEnumerable<AddressDto>>(result));
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao listar endereços - {ex.Message}");
+            }
         }
 
-        public async Task<AddressDto> GetById(int? id)
+        public async Task<ResponseModel> GetById(int? id)
         {
-            GetAddressByIdQuery getAddressByIdQuery = new GetAddressByIdQuery(id.Value);
+            try
+            {
+                GetAddressByIdQuery getAddressByIdQuery = new GetAddressByIdQuery(id.Value);
 
-            if (getAddressByIdQuery == null)
-                throw new ArgumentException("Erro ao buscar endereço");
+                if (getAddressByIdQuery == null)
+                    return new ResponseModel(500, "Erro ao buscar endereço");
 
-            Address result = await _mediator.Send(getAddressByIdQuery);
+                Address result = await _mediator.Send(getAddressByIdQuery);
 
-            return _mapper.Map<AddressDto>(result);
+                return new ResponseModel(200, _mapper.Map<AddressDto>(result));
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao buscar endereço - {ex.Message}");
+            }
         }
 
-        public async Task<AddressDto> GetByPostalCodeAsync(string postalCode)
+        public async Task<ResponseModel> GetByPostalCodeAsync(string postalCode)
         {
-            GetAddressByPostalCodeQuery getAddressByPostalCodeQuery = new GetAddressByPostalCodeQuery(postalCode);
+            try
+            {
+                GetAddressByPostalCodeQuery getAddressByPostalCodeQuery = new GetAddressByPostalCodeQuery(postalCode);
 
-            if (getAddressByPostalCodeQuery == null)
-                throw new ArgumentException("Erro ao buscar endereço");
+                if (getAddressByPostalCodeQuery == null)
+                    return new ResponseModel(500, "Erro ao buscar endereço");
 
-            Address result = await _mediator.Send(getAddressByPostalCodeQuery);
+                Address result = await _mediator.Send(getAddressByPostalCodeQuery);
 
-            return _mapper.Map<AddressDto>(result);
+                return new ResponseModel(200, _mapper.Map<AddressDto>(result));
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao buscar endereço - {ex.Message}");
+            }
         }
 
-        public async Task<IEnumerable<AddressDto>> ListByCityAsync(string city)
+        public async Task<ResponseModel> ListByCityAsync(string city)
         {
-            GetAddressByCityQuery getAddressByCityQuery = new GetAddressByCityQuery(city);
+            try
+            {
+                GetAddressByCityQuery getAddressByCityQuery = new GetAddressByCityQuery(city);
 
-            if (getAddressByCityQuery == null)
-                throw new ArgumentException("Erro ao listar endereços");
+                if (getAddressByCityQuery == null)
+                    return new ResponseModel(500, "Erro ao listar endereços");
 
-            IEnumerable<Address> result = await _mediator.Send(getAddressByCityQuery);
+                IEnumerable<Address> result = await _mediator.Send(getAddressByCityQuery);
 
-            return _mapper.Map<IEnumerable<AddressDto>>(result);
+                return new ResponseModel(200, _mapper.Map<IEnumerable<AddressDto>>(result));
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao listar endereços - {ex.Message}");
+            }
         }
 
-        public async Task<IEnumerable<AddressDto>> ListByStateAsync(string state)
+        public async Task<ResponseModel> ListByStateAsync(string state)
         {
-            GetAddressByStateQuery getAddressByStateQuery = new GetAddressByStateQuery(state);
+            try
+            {
+                GetAddressByStateQuery getAddressByStateQuery = new GetAddressByStateQuery(state);
 
-            if (getAddressByStateQuery == null)
-                throw new ArgumentException("Erro ao listar endereços");
+                if (getAddressByStateQuery == null)
+                    return new ResponseModel(500, "Erro ao listar endereços");
 
-            IEnumerable<Address> result = await _mediator.Send(getAddressByStateQuery);
+                IEnumerable<Address> result = await _mediator.Send(getAddressByStateQuery);
 
-            return _mapper.Map<IEnumerable<AddressDto>>(result);
+                return new ResponseModel(200, _mapper.Map<IEnumerable<AddressDto>>(result));
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao listar endereços - {ex.Message}");
+            }
         }
     }
 }
