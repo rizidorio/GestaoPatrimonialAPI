@@ -10,7 +10,7 @@ namespace GestaoPatrimonial.Data.EntitesConfiguration
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.PostalCode).HasMaxLength(10).IsRequired();
-            builder.Property(x => x.Adrress).HasMaxLength(100);
+            builder.Property(x => x.PublicPlace).HasMaxLength(100);
             builder.Property(x => x.District).HasMaxLength(50);
             builder.Property(x => x.City).HasMaxLength(50);
             builder.Property(x => x.State).HasMaxLength(2);

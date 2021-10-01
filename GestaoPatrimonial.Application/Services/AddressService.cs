@@ -8,6 +8,7 @@ using GestaoPatrimonial.Domain.Utils.Models;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace GestaoPatrimonial.Application.Services
@@ -98,6 +99,9 @@ namespace GestaoPatrimonial.Application.Services
 
                 Address result = await _mediator.Send(getAddressByIdQuery);
 
+                if (result == null)
+                    return new ResponseModel(404, "Endereço não encontrado");
+
                 return new ResponseModel(200, _mapper.Map<AddressDto>(result));
             }
             catch (Exception ex)
@@ -110,12 +114,22 @@ namespace GestaoPatrimonial.Application.Services
         {
             try
             {
+                Regex postaCodeRegex = new Regex(@"[\d]{2}.[\d]{3}-[\d]{3}");
+
+                if (!postaCodeRegex.IsMatch(postalCode))
+                {
+                    return new ResponseModel(409, "Cep em formato inválido (Ex. 00.000-000)");
+                }
+
                 GetAddressByPostalCodeQuery getAddressByPostalCodeQuery = new GetAddressByPostalCodeQuery(postalCode);
 
                 if (getAddressByPostalCodeQuery == null)
                     return new ResponseModel(500, "Erro ao buscar endereço");
 
                 Address result = await _mediator.Send(getAddressByPostalCodeQuery);
+
+                if (result == null)
+                    return new ResponseModel(404, "Endereço não encontrado");
 
                 return new ResponseModel(200, _mapper.Map<AddressDto>(result));
             }

@@ -43,7 +43,7 @@ namespace GestaoPatrimonial.Data.Identity
 
                         UserTokenModel model = new UserTokenModel
                         {
-                            Token = new JwtSecurityTokenHandler().WriteToken(userToken),
+                            Token = $"Bearer {new JwtSecurityTokenHandler().WriteToken(userToken)}" ,
                             User = new UserReturnModel(findUser.Id, findUser.UserName, findUser.Email, findUser.PhoneNumber),
                             Expiration = userToken.ValidTo,
                         };

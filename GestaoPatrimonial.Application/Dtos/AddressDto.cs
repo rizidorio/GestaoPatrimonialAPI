@@ -15,7 +15,7 @@ namespace GestaoPatrimonial.Application.Dtos
         [Required(ErrorMessage = "Logradouro é obrigatório")]
         [MaxLength(100, ErrorMessage = "Logradouro deve ter até 100 caracteres")]
         [DisplayName("Logradouro")]
-        public string Adrress { get; set; }
+        public string PublicPlace { get; set; }
 
         [Required(ErrorMessage = "Bairro é obrigatório")]
         [MaxLength(50, ErrorMessage = "Bairro deve ter até 50 caracteres")]

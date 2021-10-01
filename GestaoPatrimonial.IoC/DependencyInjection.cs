@@ -1,4 +1,6 @@
-﻿using GestaoPatrimonial.Application.Mappings;
+﻿using GestaoPatrimonial.Application.Interfaces;
+using GestaoPatrimonial.Application.Mappings;
+using GestaoPatrimonial.Application.Services;
 using GestaoPatrimonial.Data.Context;
 using GestaoPatrimonial.Data.Identity;
 using GestaoPatrimonial.Data.Repository;
@@ -42,6 +44,13 @@ namespace GestaoPatrimonial.IoC
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<IPatrimonialAssetRepository, PatrimonialAssetRepository>();
             services.AddScoped<ISubcategoryRepository, SubcategoryRepository>();
+
+            services.AddScoped<IAddressService, AddressService>();
+            services.AddScoped<IBranchOfficeService, BranchOfficeService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<IPatrimonialAssetService, PatrimonialAssetService>();
+            services.AddScoped<ISubcategoryService, SubcategoryService>();
 
             services.AddScoped<IAuthenticate, AuthenticateService>();
             services.AddScoped<ISeedUserRolerInitial, SeedUserRolerInitial>();

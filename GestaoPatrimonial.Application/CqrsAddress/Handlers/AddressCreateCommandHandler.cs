@@ -19,7 +19,7 @@ namespace GestaoPatrimonial.Application.CQRS.CqrsAddress.Handlers
 
         public async Task<Address> Handle(AddressCreateCommand request, CancellationToken cancellationToken)
         {
-            Address address = new Address(request.PostalCode, request.Address, request.District, request.City, request.State);
+            Address address = new Address(request.PostalCode, request.PublicPlace, request.District, request.City, request.State);
 
             if (address == null)
                 throw new ArgumentException("Erro ao criar endereço");

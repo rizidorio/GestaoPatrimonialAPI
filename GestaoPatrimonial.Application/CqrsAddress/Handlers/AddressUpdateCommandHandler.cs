@@ -23,7 +23,7 @@ namespace GestaoPatrimonial.Application.CQRS.CqrsAddress.Handlers
 
             if (findAddress != null)
             {
-                findAddress.Update(request.PostalCode, request.Address, request.District, request.City, request.State);
+                findAddress.Update(request.PostalCode, request.PublicPlace, request.District, request.City, request.State);
                 return await _repository.UpdateAsync(findAddress);
             }
 
