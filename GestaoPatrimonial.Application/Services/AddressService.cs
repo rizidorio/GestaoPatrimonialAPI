@@ -8,6 +8,8 @@ using GestaoPatrimonial.Domain.Utils.Models;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -17,6 +19,7 @@ namespace GestaoPatrimonial.Application.Services
     {
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
+        private const string AddressUrl = "http://viacep.com.br/ws/{0}/json/";
 
         public AddressService(IMapper mapper, IMediator mediator)
         {
@@ -114,9 +117,9 @@ namespace GestaoPatrimonial.Application.Services
         {
             try
             {
-                Regex postaCodeRegex = new Regex(@"[\d]{2}.[\d]{3}-[\d]{3}");
+                Regex postalCodeRegex = new Regex(@"[\d]{2}.[\d]{3}-[\d]{3}");
 
-                if (!postaCodeRegex.IsMatch(postalCode))
+                if (!postalCodeRegex.IsMatch(postalCode))
                 {
                     return new ResponseModel(409, "Cep em formato inválido (Ex. 00.000-000)");
                 }
@@ -129,7 +132,25 @@ namespace GestaoPatrimonial.Application.Services
                 Address result = await _mediator.Send(getAddressByPostalCodeQuery);
 
                 if (result == null)
-                    return new ResponseModel(404, "Endereço não encontrado");
+                {
+                    AddressModel addressModel = await GetAddressViaCep(postalCode);
+
+                    if (addressModel.Logradouro == null)
+                        return new ResponseModel(404, "Endereço não encontrado");
+
+                    AddressDto addressDto = new AddressDto
+                    {
+                        PostalCode = postalCode,
+                        PublicPlace = addressModel.Logradouro,
+                        District = addressModel.Bairro,
+                        City = addressModel.Localidade,
+                        State = addressModel.Uf
+                    };
+
+                    AddressCreateCommand addressCreateCommand = _mapper.Map<AddressCreateCommand>(addressDto);
+
+                    result = await _mediator.Send(addressCreateCommand);
+                }
 
                 return new ResponseModel(200, _mapper.Map<AddressDto>(result));
             }
@@ -175,6 +196,15 @@ namespace GestaoPatrimonial.Application.Services
             {
                 return new ResponseModel(500, $"Erro ao listar endereços - {ex.Message}");
             }
+        }
+
+        private async Task<AddressModel> GetAddressViaCep(string postalCode)
+        {
+            string Url = string.Format(AddressUrl, postalCode.Remove(2, 1).Remove(5, 1));
+
+            HttpClient client = new HttpClient();
+
+            return await client.GetFromJsonAsync<AddressModel>(Url);
         }
     }
 }
