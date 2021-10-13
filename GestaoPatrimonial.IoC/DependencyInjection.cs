@@ -49,6 +49,7 @@ namespace GestaoPatrimonial.IoC
             services.AddScoped<IBranchOfficeService, BranchOfficeService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<IDepartmentService, DepartmentService>();
             services.AddScoped<IPatrimonialAssetService, PatrimonialAssetService>();
             services.AddScoped<ISubcategoryService, SubcategoryService>();
 

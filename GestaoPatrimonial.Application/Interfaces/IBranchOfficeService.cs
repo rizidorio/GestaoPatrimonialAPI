@@ -1,16 +1,16 @@
 ﻿using GestaoPatrimonial.Application.Dtos;
-using System.Collections.Generic;
+using GestaoPatrimonial.Domain.Utils.Models;
 using System.Threading.Tasks;
 
 namespace GestaoPatrimonial.Application.Interfaces
 {
     public interface IBranchOfficeService
     {
-        Task<IEnumerable<BranchOfficeDto>> GetAll();
-        Task<IEnumerable<BranchOfficeDto>> ListByCompanyAsync(int companyId);
-        Task<BranchOfficeDto> GetById(int? id);
-        Task Add(BranchOfficeDto branchOfficeDto);
-        Task Update(BranchOfficeDto branchOfficeDto);
-        Task Delete(int? id);
+        Task<ResponseModel> GetAll();
+        Task<ResponseModel> ListByCompanyAsync(int companyId);
+        Task<ResponseModel> GetById(int? id);
+        Task<ResponseModel> Add(BranchOfficeDto branchOfficeDto);
+        Task<ResponseModel> Update(BranchOfficeDto branchOfficeDto);
+        Task<ResponseModel> Delete(int? id);
     }
 }

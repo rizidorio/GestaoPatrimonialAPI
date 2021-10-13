@@ -39,8 +39,10 @@ namespace GestaoPatrimonial.Domain.Entities
 
             PhoneNumber = phoneNumber;
             CellPhoneNumber = cellPhoneNumber;
+            Email = email;
             ResponsiblePhoneNumber = responsiblePhoneNumber;
             ResponsibleCellPhoneNumber = responsibleCellPhoneNumber;
+            ResponsibleEmail = responsibleEmail;
             CompanyId = companyId;
             AddressId = addressId;
             AddressNumber = addressNumber;
@@ -59,8 +61,10 @@ namespace GestaoPatrimonial.Domain.Entities
 
             PhoneNumber = phoneNumber;
             CellPhoneNumber = cellPhoneNumber;
+            Email = email;
             ResponsiblePhoneNumber = responsiblePhoneNumber;
             ResponsibleCellPhoneNumber = responsibleCellPhoneNumber;
+            ResponsibleEmail = responsibleEmail;
             CompanyId = companyId;
             AddressId = addressId;
             AddressNumber = addressNumber;
@@ -74,7 +78,8 @@ namespace GestaoPatrimonial.Domain.Entities
             DomainExceptionValidation.Validate(responsibleName.Length > 100, "Nome do responsável deve ter menos de 100 caracteres");
 
             DomainExceptionValidation.Validate(addressComplement?.Length > 80, "Complemento deve ter menos de 80 caracteres");
-
+            ResponsibleName = responsibleName;
+            AddressComplement = addressComplement;
         }
     }
 }

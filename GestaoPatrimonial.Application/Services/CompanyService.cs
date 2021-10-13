@@ -4,11 +4,10 @@ using GestaoPatrimonial.Application.CqrsCompany.Queries;
 using GestaoPatrimonial.Application.Dtos;
 using GestaoPatrimonial.Application.Interfaces;
 using GestaoPatrimonial.Domain.Entities;
+using GestaoPatrimonial.Domain.Utils.Models;
 using MediatR;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GestaoPatrimonial.Application.Services
@@ -24,50 +23,89 @@ namespace GestaoPatrimonial.Application.Services
             _mediator = mediator;
         }
 
-        public async Task Add(CompanyDto companyDto)
+        public async Task<ResponseModel> GetAll()
         {
-            CompanyCreateCommand companyCreateCommand = _mapper.Map<CompanyCreateCommand>(companyDto);
-            await _mediator.Send(companyCreateCommand);
+            try
+            {
+                GetCompanyQuery getCompanyQuery = new GetCompanyQuery();
+
+                if (getCompanyQuery == null)
+                    return new ResponseModel(500, "Erro ao listar empresas");
+
+                IEnumerable<Company> result = await _mediator.Send(getCompanyQuery);
+
+                return new ResponseModel(200, _mapper.Map<IEnumerable<CompanyDto>>(result));
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao listar empresas - {ex.Message}");
+            }
         }
 
-        public async Task Update(CompanyDto companyDto)
+        public async Task<ResponseModel> GetById(int id)
         {
-            CompanyUpdateCommand companyUpdateCommand = _mapper.Map<CompanyUpdateCommand>(companyDto);
-            await _mediator.Send(companyUpdateCommand);
+            try
+            {
+                GetCompanyByIdQuery getCompanyByIdQuery = new GetCompanyByIdQuery(id);
+
+                if (getCompanyByIdQuery == null)
+                    return new ResponseModel(500, "Erro ao buscar empresa");
+
+                Company result = await _mediator.Send(getCompanyByIdQuery);
+
+                if (result == null)
+                    return new ResponseModel(404, "Empresa não encontrada");
+
+                return new ResponseModel(200, _mapper.Map<CompanyDto>(result));
+
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao buscar empresa - {ex.Message}");
+            }
         }
 
-        public async Task Delete(int id)
+        public async Task<ResponseModel> Add(CompanyDto companyDto)
         {
-            CompanyRemoveCommand companyRemoveCommand = new CompanyRemoveCommand(id);
-
-            if (companyRemoveCommand == null)
-                throw new ArgumentException("Erro ao buscar empresa");
-
-            await _mediator.Send(companyRemoveCommand);
+            try
+            {
+                CompanyCreateCommand companyCreateCommand = _mapper.Map<CompanyCreateCommand>(companyDto);
+                return new ResponseModel(200, await _mediator.Send(companyCreateCommand), "Empresa criada com sucesso");
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao adicionar empresa - {ex.Message}");
+            }
         }
 
-        public async Task<IEnumerable<CompanyDto>> GetAll()
+        public async Task<ResponseModel> Update(CompanyDto companyDto)
         {
-            GetCompanyQuery getCompanyQuery = new GetCompanyQuery();
-
-            if (getCompanyQuery == null)
-                throw new ArgumentException("Erro ao listar empresas");
-
-            IEnumerable<Company> result = await _mediator.Send(getCompanyQuery);
-
-            return _mapper.Map<IEnumerable<CompanyDto>>(result);
+            try
+            {
+                CompanyUpdateCommand companyUpdateCommand = _mapper.Map<CompanyUpdateCommand>(companyDto);
+                return new ResponseModel(200, await _mediator.Send(companyUpdateCommand), "Empresa atualizada com sucesso");
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao atualizar empresa - {ex.Message}");
+            }
         }
 
-        public async Task<CompanyDto> GetById(int id)
+        public async Task<ResponseModel> Delete(int id)
         {
-            GetCompanyByIdQuery getCompanyByIdQuery = new GetCompanyByIdQuery(id);
+            try
+            {
+                CompanyRemoveCommand companyRemoveCommand = new CompanyRemoveCommand(id);
 
-            if (getCompanyByIdQuery == null)
-                throw new ArgumentException("Erro ao buscar empresa");
+                if (companyRemoveCommand == null)
+                    return new ResponseModel(500, "Erro ao buscar empresa");
 
-            Company result = await _mediator.Send(getCompanyByIdQuery);
-
-            return _mapper.Map<CompanyDto>(result);
+                return new ResponseModel(200, await _mediator.Send(companyRemoveCommand), "Empresa removida com sucesso");
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao remover empresa - {ex.Message}");
+            }
         }
     }
 }

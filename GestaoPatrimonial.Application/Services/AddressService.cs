@@ -27,51 +27,6 @@ namespace GestaoPatrimonial.Application.Services
             _mediator = mediator;
         }
 
-        public async Task<ResponseModel> Add(AddressDto addressDto)
-        {
-            try
-            {
-                AddressCreateCommand addressCreateCommand = _mapper.Map<AddressCreateCommand>(addressDto);
-
-                return new ResponseModel(201, await _mediator.Send(addressCreateCommand), "Endereço criado com sucesso");
-            }
-            catch (Exception ex)
-            {
-                return new ResponseModel(500, $"Erro ao criar endereço - {ex.Message}");
-            }
-        }
-
-        public async Task<ResponseModel> Update(AddressDto addressDto)
-        {
-            try
-            {
-                AddressUpdateCommand addressUpdateCommand = _mapper.Map<AddressUpdateCommand>(addressDto);
-
-                return new ResponseModel(200, await _mediator.Send(addressUpdateCommand), "Endereço atualizado com sucesso");
-            }
-            catch (Exception ex)
-            {
-                return new ResponseModel(500, $"Erro ao atualizar endereço - {ex.Message}");
-            }
-        }
-
-        public async Task<ResponseModel> Delete(int? id)
-        {
-            try
-            {
-                AddressRemoveCommand addressRemoveCommand = new AddressRemoveCommand(id.Value);
-
-                if (addressRemoveCommand != null)
-                    return new ResponseModel(200, await _mediator.Send(addressRemoveCommand), "Endereço removido com sucesso");
-
-                return new ResponseModel(500, "Erro ao remover endereço");
-            }
-            catch (Exception ex)
-            {
-                return new ResponseModel(500, $"Erro ao remover endereço - {ex.Message}");
-            }
-        }
-
         public async Task<ResponseModel> GetAll()
         {
             try
@@ -110,6 +65,51 @@ namespace GestaoPatrimonial.Application.Services
             catch (Exception ex)
             {
                 return new ResponseModel(500, $"Erro ao buscar endereço - {ex.Message}");
+            }
+        }
+
+        public async Task<ResponseModel> Add(AddressDto addressDto)
+        {
+            try
+            {
+                AddressCreateCommand addressCreateCommand = _mapper.Map<AddressCreateCommand>(addressDto);
+
+                return new ResponseModel(201, await _mediator.Send(addressCreateCommand), "Endereço criado com sucesso");
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao criar endereço - {ex.Message}");
+            }
+        }
+
+        public async Task<ResponseModel> Update(AddressDto addressDto)
+        {
+            try
+            {
+                AddressUpdateCommand addressUpdateCommand = _mapper.Map<AddressUpdateCommand>(addressDto);
+
+                return new ResponseModel(200, await _mediator.Send(addressUpdateCommand), "Endereço atualizado com sucesso");
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao atualizar endereço - {ex.Message}");
+            }
+        }
+
+        public async Task<ResponseModel> Delete(int? id)
+        {
+            try
+            {
+                AddressRemoveCommand addressRemoveCommand = new AddressRemoveCommand(id.Value);
+
+                if (addressRemoveCommand == null)
+                    return new ResponseModel(500, "Erro ao remover endereço");
+
+                return new ResponseModel(200, await _mediator.Send(addressRemoveCommand), "Endereço removido com sucesso");
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao remover endereço - {ex.Message}");
             }
         }
 

@@ -57,8 +57,5 @@ namespace GestaoPatrimonial.Application.Dtos
         [MaxLength(10, ErrorMessage = "Complemento do endereço deve ter até 80 caracteres")]
         [DisplayName("Complemento endereço")]
         public string AddressComplement { get; set; }
-
-        public List<BranchOfficeDto> Offices { get; set; }
-        public List<DepartmentDto> Departments { get; set; }
     }
 }

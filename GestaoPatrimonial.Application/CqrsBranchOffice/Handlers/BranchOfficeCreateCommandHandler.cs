@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GestaoPatrimonial.Application.CqrsBranchOffice.Handlers
 {
-    public class BranchOfficeCreateCommandHandler : IRequestHandler<BranchOfficeCommand, BranchOffice>
+    public class BranchOfficeCreateCommandHandler : IRequestHandler<BranchOfficeCreateCommand, BranchOffice>
     {
         private readonly IBrachOfficeRepository _repository;
 
@@ -17,7 +17,7 @@ namespace GestaoPatrimonial.Application.CqrsBranchOffice.Handlers
             _repository = repository;
         }
 
-        public async Task<BranchOffice> Handle(BranchOfficeCommand request, CancellationToken cancellationToken)
+        public async Task<BranchOffice> Handle(BranchOfficeCreateCommand request, CancellationToken cancellationToken)
         {
             BranchOffice branchOffice = new BranchOffice(request.Name, request.Email, request.PhoneNumber, request.CellPhoneNumber, request.ResponsibleName,
                                                          request.ResponsiblePhoneNumber, request.ResponsibleCellPhoneNumber, request.ResponsibleEmail, request.CompanyId,

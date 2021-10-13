@@ -46,7 +46,6 @@ namespace GestaoPatrimonial.Application.Dtos
         [Required(ErrorMessage = "Matriz é obrigatório")]
         [DisplayName("Matriz")]
         public int? CompanyId { get; set; }
-        public CompanyDto Company { get; set; }
 
         [Required(ErrorMessage = "Endereço é obrigatório")]
         public int? AddressId { get; set; }
@@ -55,7 +54,7 @@ namespace GestaoPatrimonial.Application.Dtos
         [DisplayName("Nº endereço")]
         public string AddressNumber { get; set; }
 
-        [MaxLength(10, ErrorMessage = "Complemento do endereço deve ter até 80 caracteres")]
+        [MaxLength(80, ErrorMessage = "Complemento do endereço deve ter até 80 caracteres")]
         [DisplayName("Complemento endereço")]
         public string AddressComplement { get; set; }
     }

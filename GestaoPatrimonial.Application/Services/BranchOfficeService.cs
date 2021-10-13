@@ -4,6 +4,7 @@ using GestaoPatrimonial.Application.CqrsBranchOffice.Queries;
 using GestaoPatrimonial.Application.Dtos;
 using GestaoPatrimonial.Application.Interfaces;
 using GestaoPatrimonial.Domain.Entities;
+using GestaoPatrimonial.Domain.Utils.Models;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -22,65 +23,112 @@ namespace GestaoPatrimonial.Application.Services
             _mediator = mediator;
         }
 
-        public async Task Add(BranchOfficeDto branchOfficeDto)
+        public async Task<ResponseModel> GetAll()
         {
-            BranchOfficeCreateCommand branchOfficeCreateCommand = _mapper.Map<BranchOfficeCreateCommand>(branchOfficeDto);
-            await _mediator.Send(branchOfficeCreateCommand);
+            try
+            {
+                GetBranchOfficeQuery getBranchOfficeQuery = new GetBranchOfficeQuery();
+
+                if (getBranchOfficeQuery == null)
+                    return new ResponseModel(500, "Erro ao listar filiais");
+
+                IEnumerable<BranchOffice> result = await _mediator.Send(getBranchOfficeQuery);
+
+                return new ResponseModel(200, _mapper.Map<IEnumerable<BranchOfficeDto>>(result));
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao listar filiais - {ex.Message}");
+            }
         }
 
-        public async Task Update(BranchOfficeDto branchOfficeDto)
+        public async Task<ResponseModel> GetById(int? id)
         {
-            BranchOfficeUpdateCommand branchOfficeUpdateCommand = _mapper.Map<BranchOfficeUpdateCommand>(branchOfficeDto);
+            try
+            {
+                GetBranchOfficeByIdQuery getBranchOfficeByIdQuery = new GetBranchOfficeByIdQuery(id.Value);
 
-            await _mediator.Send(branchOfficeUpdateCommand);
+                if (getBranchOfficeByIdQuery == null)
+                    return new ResponseModel(500, "Erro ao buscar filial");
+
+                BranchOffice result = await _mediator.Send(getBranchOfficeByIdQuery);
+
+                if (result == null)
+                    return new ResponseModel(404, "Filial não encontrada");
+
+                return new ResponseModel(200, _mapper.Map<BranchOfficeDto>(result));
+
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao buscar filial - {ex.Message}");
+            }
         }
 
-        public async Task Delete(int? id)
+        public async Task<ResponseModel> ListByCompanyAsync(int companyId)
         {
-            BranchOfficeRemoveCommand branchOfficeRemoveCommand = new BranchOfficeRemoveCommand(id.Value);
+            try
+            {
+                GetBranchOfficeByCompanyQuery getBranchOfficeByCompanyQuery = new GetBranchOfficeByCompanyQuery(companyId);
 
-            if (branchOfficeRemoveCommand == null)
-                throw new Exception("Erro ao buscar filial");
+                if (getBranchOfficeByCompanyQuery == null)
+                    throw new ArgumentException("Erro ao listar filiais");
 
-            await _mediator.Send(branchOfficeRemoveCommand);
+                IEnumerable<BranchOffice> result = await _mediator.Send(getBranchOfficeByCompanyQuery);
+
+                return new ResponseModel(200, _mapper.Map<IEnumerable<BranchOfficeDto>>(result));
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao listar filiais - {ex.Message}");
+            }
         }
 
-        public async Task<IEnumerable<BranchOfficeDto>> GetAll()
+        public async Task<ResponseModel> Add(BranchOfficeDto branchOfficeDto)
         {
-            GetBranchOfficeQuery getBranchOfficeQuery = new GetBranchOfficeQuery();
-
-            if (getBranchOfficeQuery == null)
-                throw new ArgumentException("Erro ao listar filiais");
-
-            IEnumerable<BranchOffice> result = await _mediator.Send(getBranchOfficeQuery);
-
-            return _mapper.Map<IEnumerable<BranchOfficeDto>>(result);
+            try
+            {
+                BranchOfficeCreateCommand branchOfficeCreateCommand = _mapper.Map<BranchOfficeCreateCommand>(branchOfficeDto);
+                return new ResponseModel(201, await _mediator.Send(branchOfficeCreateCommand), "Filial criada com sucesso");
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao criar filial - {ex.Message}");
+            }
+            
         }
 
-        public async Task<BranchOfficeDto> GetById(int? id)
+        public async Task<ResponseModel> Update(BranchOfficeDto branchOfficeDto)
         {
-            GetBranchOfficeByIdQuery getBranchOfficeByIdQuery = new GetBranchOfficeByIdQuery(id.Value);
 
-            if (getBranchOfficeByIdQuery == null)
-                throw new ArgumentException("Erro ao buscar filial");
+            try
+            {
+                BranchOfficeUpdateCommand branchOfficeUpdateCommand = _mapper.Map<BranchOfficeUpdateCommand>(branchOfficeDto);
+                return new ResponseModel(200, await _mediator.Send(branchOfficeUpdateCommand), "Filial atualizada com sucesso");
 
-            BranchOffice result = await _mediator.Send(getBranchOfficeByIdQuery);
-
-            return _mapper.Map<BranchOfficeDto>(result);
-
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao atualizar filial - {ex.Message}");
+            }
         }
 
-        public async Task<IEnumerable<BranchOfficeDto>> ListByCompanyAsync(int companyId)
+        public async Task<ResponseModel> Delete(int? id)
         {
-            GetBranchOfficeByCompanyQuery getBranchOfficeByCompanyQuery = new GetBranchOfficeByCompanyQuery(companyId);
+            try
+            {
+                BranchOfficeRemoveCommand branchOfficeRemoveCommand = new BranchOfficeRemoveCommand(id.Value);
 
-            if (getBranchOfficeByCompanyQuery == null)
-                throw new ArgumentException("Erro ao listar filiais");
+                if (branchOfficeRemoveCommand == null)
+                    return new ResponseModel(500, "Erro ao remover filial");
 
-            IEnumerable<BranchOffice> result = await _mediator.Send(getBranchOfficeByCompanyQuery);
+                return new ResponseModel(200, await _mediator.Send(branchOfficeRemoveCommand), "Filial removida com sucesso");
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao remover filial - {ex.Message}");
+            }
 
-            return _mapper.Map<IEnumerable<BranchOfficeDto>>(result);
         }
-
     }
 }

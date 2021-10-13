@@ -1,16 +1,16 @@
 ﻿using GestaoPatrimonial.Application.Dtos;
-using System.Collections.Generic;
+using GestaoPatrimonial.Domain.Utils.Models;
 using System.Threading.Tasks;
 
 namespace GestaoPatrimonial.Application.Interfaces
 {
     public interface IDepartmentService
     {
-        Task<IEnumerable<DepartmentDto>> GetAll();
-        Task<DepartmentDto> GetById(int? id);
-        Task<DepartmentDto> GetByInitials(string initials);
-        Task Add(DepartmentDto departmentDto);
-        Task Update(DepartmentDto departmentDto);
-        Task Delete(int? id);
+        Task<ResponseModel> GetAll();
+        Task<ResponseModel> GetById(int? id);
+        Task<ResponseModel> GetByInitials(string initials);
+        Task<ResponseModel> Add(DepartmentDto departmentDto);
+        Task<ResponseModel> Update(DepartmentDto departmentDto);
+        Task<ResponseModel> Delete(int? id);
     }
 }

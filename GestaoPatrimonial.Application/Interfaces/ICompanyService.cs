@@ -1,15 +1,15 @@
 ﻿using GestaoPatrimonial.Application.Dtos;
-using System.Collections.Generic;
+using GestaoPatrimonial.Domain.Utils.Models;
 using System.Threading.Tasks;
 
 namespace GestaoPatrimonial.Application.Interfaces
 {
     public interface ICompanyService
     {
-        Task<IEnumerable<CompanyDto>> GetAll();
-        Task<CompanyDto> GetById(int id);
-        Task Add(CompanyDto companyDto);
-        Task Update(CompanyDto companyDto);
-        Task Delete(int id);
+        Task<ResponseModel> GetAll();
+        Task<ResponseModel> GetById(int id);
+        Task<ResponseModel> Add(CompanyDto companyDto);
+        Task<ResponseModel> Update(CompanyDto companyDto);
+        Task<ResponseModel> Delete(int id);
     }
 }

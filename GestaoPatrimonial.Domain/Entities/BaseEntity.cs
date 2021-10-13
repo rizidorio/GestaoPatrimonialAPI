@@ -25,7 +25,7 @@ namespace GestaoPatrimonial.Domain.Entities
 
             if (!string.IsNullOrEmpty(email))
             {
-                DomainExceptionValidation.Validate(EmailRegex.IsMatch(email), "E-mail inválido");
+                DomainExceptionValidation.Validate(!EmailRegex.IsMatch(email), "E-mail inválido");
                 DomainExceptionValidation.Validate(email.Length > 80, "E-mail deve ter até 80 caracteres");
             }
         }
@@ -36,7 +36,7 @@ namespace GestaoPatrimonial.Domain.Entities
 
             if (!string.IsNullOrEmpty(phoneNumber))
             {
-                DomainExceptionValidation.Validate(PhoneRegex.IsMatch(phoneNumber), "Telefone inválido");
+                DomainExceptionValidation.Validate(!PhoneRegex.IsMatch(phoneNumber), "Telefone inválido");
             }
         }
 
@@ -46,7 +46,7 @@ namespace GestaoPatrimonial.Domain.Entities
 
             if (!string.IsNullOrEmpty(cellPhoneNumber))
             {
-                DomainExceptionValidation.Validate(CellPhoneRegex.IsMatch(cellPhoneNumber), "Celular inválido");
+                DomainExceptionValidation.Validate(!CellPhoneRegex.IsMatch(cellPhoneNumber), "Celular inválido");
             }
         }
     }
