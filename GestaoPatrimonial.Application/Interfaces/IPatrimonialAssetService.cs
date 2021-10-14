@@ -1,19 +1,19 @@
 ﻿using GestaoPatrimonial.Application.Dtos;
-using System.Collections.Generic;
+using GestaoPatrimonial.Domain.Utils.Models;
 using System.Threading.Tasks;
 
 namespace GestaoPatrimonial.Application.Interfaces
 {
     public interface IPatrimonialAssetService
     {
-        Task<IEnumerable<PatrimonialAssetDto>> GetAll();
-        Task<IEnumerable<PatrimonialAssetDto>> ListByCategoryAsync(int categoryId);
-        Task<IEnumerable<PatrimonialAssetDto>> ListBySubcategoryAsync(int subcategoryId);
-        Task<IEnumerable<PatrimonialAssetDto>> ListByBranchOfficeAsync(int branchOfficeId);
-        Task<IEnumerable<PatrimonialAssetDto>> ListByDepartmentAsync(int departmentId);
-        Task<PatrimonialAssetDto> GetById(int id);
-        Task Add(PatrimonialAssetDto patrimonialAssetDto);
-        Task Update(PatrimonialAssetDto patrimonialAssetDto);
-        Task Delete(int? id);
+        Task<ResponseModel> GetAll();
+        Task<ResponseModel> ListByCategoryAsync(int categoryId);
+        Task<ResponseModel> ListBySubcategoryAsync(int subcategoryId);
+        Task<ResponseModel> ListByBranchOfficeAsync(int branchOfficeId);
+        Task<ResponseModel> ListByDepartmentAsync(int departmentId);
+        Task<ResponseModel> GetById(int id);
+        Task<ResponseModel> Add(PatrimonialAssetDto patrimonialAssetDto);
+        Task<ResponseModel> Update(PatrimonialAssetDto patrimonialAssetDto);
+        Task<ResponseModel> Delete(int? id);
     }
 }

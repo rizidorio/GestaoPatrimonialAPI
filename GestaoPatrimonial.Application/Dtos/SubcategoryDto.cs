@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace GestaoPatrimonial.Application.Dtos
@@ -15,6 +14,5 @@ namespace GestaoPatrimonial.Application.Dtos
 
         [Required(ErrorMessage = "Categoria é obrigatório")]
         public int? CategoryId { get; set; }
-        public ICollection<PatrimonialAssetDto> PatrimonialAssets { get; set; }
     }
 }

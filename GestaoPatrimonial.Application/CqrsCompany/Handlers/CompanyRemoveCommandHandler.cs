@@ -24,7 +24,7 @@ namespace GestaoPatrimonial.Application.CqrsCompany.Handlers
             if (findCompany != null)
                 return await _repository.DeleteAsync(findCompany);
 
-            throw new ArgumentException("Categoria não encontrada");
+            throw new ArgumentException("Empresa não encontrada");
         }
     }
 }

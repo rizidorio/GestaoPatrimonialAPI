@@ -4,6 +4,7 @@ using GestaoPatrimonial.Application.CqrsCategory.Queries;
 using GestaoPatrimonial.Application.Dtos;
 using GestaoPatrimonial.Application.Interfaces;
 using GestaoPatrimonial.Domain.Entities;
+using GestaoPatrimonial.Domain.Utils.Models;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -22,50 +23,93 @@ namespace GestaoPatrimonial.Application.Services
             _mediator = mediator;
         }
 
-        public async Task Add(CategoryDto categoryDto)
+        public async Task<ResponseModel> GetAll()
         {
-            CategoryCreateCommand categoryCreateCommand = _mapper.Map<CategoryCreateCommand>(categoryDto);
-            await _mediator.Send(categoryCreateCommand);
+            try
+            {
+                GetCategoryQuery getCategoryQuery = new GetCategoryQuery();
+
+                if (getCategoryQuery == null)
+                    return new ResponseModel(500, "Erro ao buscar categoria");
+
+                IEnumerable<Category> result = await _mediator.Send(getCategoryQuery);
+
+                return new ResponseModel(200, _mapper.Map<IEnumerable<CategoryDto>>(result));
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao listar categorias - {ex.Message}");
+            } 
         }
 
-        public async Task Update(CategoryDto categoryDto)
+        public async Task<ResponseModel> GetById(int id)
         {
-            CategoryUpdateCommand categoryUpdateCommand = _mapper.Map<CategoryUpdateCommand>(categoryDto);
-            await _mediator.Send(categoryUpdateCommand);
+            try
+            {
+                GetCategoryByIdQuery getCategoryByIdQuery = new GetCategoryByIdQuery(id);
+
+                if (getCategoryByIdQuery == null)
+                    return new ResponseModel(500, "Erro ao buscar categoria");
+
+                Category result = await _mediator.Send(getCategoryByIdQuery);
+                
+                if (result == null)
+                    return new ResponseModel(404, "Categoria não encontrada");
+
+                return new ResponseModel(200, _mapper.Map<CategoryDto>(result));
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao buscar categoria - {ex.Message}");
+            }
+        }
+        public async Task<ResponseModel> Add(CategoryDto categoryDto)
+        {
+            try
+            {
+                CategoryCreateCommand categoryCreateCommand = _mapper.Map<CategoryCreateCommand>(categoryDto);
+                return new ResponseModel(201, await _mediator.Send(categoryCreateCommand), "Categoria criada com sucesso");
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao adicionar categoria - {ex.Message}");
+            }
         }
 
-        public async Task Delete(int id)
+        public async Task<ResponseModel> Update(CategoryDto categoryDto)
         {
-            CategoryRemoveCommand categoryRemoveCommand = new CategoryRemoveCommand(id);
+            try
+            {
+                CategoryUpdateCommand categoryUpdateCommand = _mapper.Map<CategoryUpdateCommand>(categoryDto);
+                return new ResponseModel(200, await _mediator.Send(categoryUpdateCommand), "Categoria atualizada com sucesso");
+            }
+            catch (Exception ex)
+            {
+                if (ex.GetType().Equals(typeof(ArgumentException)))
+                    return new ResponseModel(404, ex.Message);
 
-            if (categoryRemoveCommand == null)
-                throw new ArgumentException("Erro ao buscar categoria");
-
-            await _mediator.Send(categoryRemoveCommand);
+                return new ResponseModel(500, $"Erro ao atualizar categoria - {ex.Message}");
+            }
         }
 
-        public async Task<IEnumerable<CategoryDto>> GetAll()
+        public async Task<ResponseModel> Delete(int id)
         {
-            GetCategoryQuery getCategoryQuery = new GetCategoryQuery();
+            try
+            {
+                CategoryRemoveCommand categoryRemoveCommand = new CategoryRemoveCommand(id);
 
-            if (getCategoryQuery == null)
-                throw new ArgumentException("Erro ao buscar categoria");
+                if (categoryRemoveCommand == null)
+                    return new ResponseModel(500, "Erro ao buscar categoria");
 
-            IEnumerable<Category> result = await _mediator.Send(getCategoryQuery);
+                return new ResponseModel(200, await _mediator.Send(categoryRemoveCommand), "Categoria removida com sucesso");
+            }
+            catch (Exception ex)
+            {
+                if (ex.GetType().Equals(typeof(ArgumentException)))
+                    return new ResponseModel(404, ex.Message);
 
-            return _mapper.Map<IEnumerable<CategoryDto>>(result);
-        }
-
-        public async Task<CategoryDto> GetById(int id)
-        {
-            GetCategoryByIdQuery getCategoryByIdQuery = new GetCategoryByIdQuery(id);
-
-            if (getCategoryByIdQuery == null)
-                throw new ArgumentException("Erro ao buscar categoria");
-
-            Category result = await _mediator.Send(getCategoryByIdQuery);
-
-            return _mapper.Map<CategoryDto>(result);
+                return new ResponseModel(500, $"Erro ao remover categoria - {ex.Message}");
+            } 
         }
     }
 }

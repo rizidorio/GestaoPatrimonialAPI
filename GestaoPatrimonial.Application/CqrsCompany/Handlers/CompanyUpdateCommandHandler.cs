@@ -29,7 +29,7 @@ namespace GestaoPatrimonial.Application.CqrsCompany.Handlers
                 return await _repository.UpdateAsync(findCompany);
             }
 
-            throw new ArgumentException("Categoria não encontrada");
+            throw new ArgumentException("Empresa não encontrada");
         }
     }
 }

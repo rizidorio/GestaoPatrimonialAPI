@@ -95,12 +95,10 @@ namespace GestaoPatrimonial.Application.Services
             {
                 return new ResponseModel(500, $"Erro ao criar filial - {ex.Message}");
             }
-            
         }
 
         public async Task<ResponseModel> Update(BranchOfficeDto branchOfficeDto)
         {
-
             try
             {
                 BranchOfficeUpdateCommand branchOfficeUpdateCommand = _mapper.Map<BranchOfficeUpdateCommand>(branchOfficeDto);
@@ -109,6 +107,9 @@ namespace GestaoPatrimonial.Application.Services
             }
             catch (Exception ex)
             {
+                if (ex.GetType().Equals(typeof(ArgumentException)))
+                    return new ResponseModel(404, ex.Message);
+
                 return new ResponseModel(500, $"Erro ao atualizar filial - {ex.Message}");
             }
         }
@@ -126,9 +127,11 @@ namespace GestaoPatrimonial.Application.Services
             }
             catch (Exception ex)
             {
+                if (ex.GetType().Equals(typeof(ArgumentException)))
+                    return new ResponseModel(404, ex.Message);
+
                 return new ResponseModel(500, $"Erro ao remover filial - {ex.Message}");
             }
-
         }
     }
 }

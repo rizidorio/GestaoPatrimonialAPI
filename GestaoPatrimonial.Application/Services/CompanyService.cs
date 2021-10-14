@@ -70,7 +70,7 @@ namespace GestaoPatrimonial.Application.Services
             try
             {
                 CompanyCreateCommand companyCreateCommand = _mapper.Map<CompanyCreateCommand>(companyDto);
-                return new ResponseModel(200, await _mediator.Send(companyCreateCommand), "Empresa criada com sucesso");
+                return new ResponseModel(201, await _mediator.Send(companyCreateCommand), "Empresa criada com sucesso");
             }
             catch (Exception ex)
             {
@@ -87,6 +87,9 @@ namespace GestaoPatrimonial.Application.Services
             }
             catch (Exception ex)
             {
+                if (ex.GetType().Equals(typeof(ArgumentException)))
+                    return new ResponseModel(404, ex.Message);
+
                 return new ResponseModel(500, $"Erro ao atualizar empresa - {ex.Message}");
             }
         }
@@ -104,6 +107,9 @@ namespace GestaoPatrimonial.Application.Services
             }
             catch (Exception ex)
             {
+                if (ex.GetType().Equals(typeof(ArgumentException)))
+                    return new ResponseModel(404, ex.Message);
+
                 return new ResponseModel(500, $"Erro ao remover empresa - {ex.Message}");
             }
         }

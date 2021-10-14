@@ -93,7 +93,7 @@ namespace GestaoPatrimonial.Application.Services
             try
             {
                 DepartmentCreateCommand departmentCreateCommand = _mapper.Map<DepartmentCreateCommand>(departmentDto);
-                return new ResponseModel(200, await _mediator.Send(departmentCreateCommand), "Setor criado com sucesso");
+                return new ResponseModel(201, await _mediator.Send(departmentCreateCommand), "Setor criado com sucesso");
             }
             catch (Exception ex)
             {
@@ -110,7 +110,10 @@ namespace GestaoPatrimonial.Application.Services
             }
             catch (Exception ex)
             {
-                return new ResponseModel(500, $"Erro ao atulizar setor - {ex.Message}");
+                if (ex.GetType().Equals(typeof(ArgumentException)))
+                    return new ResponseModel(404, ex.Message);
+
+                return new ResponseModel(500, $"Erro ao atualizar setor - {ex.Message}");
             }
         }
         public async Task<ResponseModel> Delete(int? id)
@@ -126,7 +129,10 @@ namespace GestaoPatrimonial.Application.Services
             }
             catch (Exception ex)
             {
-                return new ResponseModel(500, $"Erro ao atulizar setor - {ex.Message}");
+                if (ex.GetType().Equals(typeof(ArgumentException)))
+                    return new ResponseModel(404, ex.Message);
+
+                return new ResponseModel(500, $"Erro ao remover setor - {ex.Message}");
             }
         }
     }

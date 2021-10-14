@@ -1,15 +1,15 @@
 ﻿using GestaoPatrimonial.Application.Dtos;
-using System.Collections.Generic;
+using GestaoPatrimonial.Domain.Utils.Models;
 using System.Threading.Tasks;
 
 namespace GestaoPatrimonial.Application.Interfaces
 {
     public interface ICategoryService
     {
-        Task<IEnumerable<CategoryDto>> GetAll();
-        Task<CategoryDto> GetById(int id);
-        Task Add(CategoryDto categoryDto);
-        Task Update(CategoryDto categoryDto);
-        Task Delete(int id);
+        Task<ResponseModel> GetAll();
+        Task<ResponseModel> GetById(int id);
+        Task<ResponseModel> Add(CategoryDto categoryDto);
+        Task<ResponseModel> Update(CategoryDto categoryDto);
+        Task<ResponseModel> Delete(int id);
     }
 }
