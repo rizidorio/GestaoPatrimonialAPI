@@ -30,6 +30,7 @@ namespace GestaoPatrimonial.API
             services.AddInfrastructure(Configuration);
             services.AddInfrastructureJWT(Configuration);
             services.AddInfrastructureSwagger();
+            services.AddInfrastructureCors();
 
             services.AddControllers();
             
@@ -44,7 +45,7 @@ namespace GestaoPatrimonial.API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "GestaoPatrimonial.API v1"));
             }
-
+            app.UseCors("CorsPolicy");
             app.UseHttpsRedirection();
             app.UseStatusCodePages();
             app.UseRouting();
