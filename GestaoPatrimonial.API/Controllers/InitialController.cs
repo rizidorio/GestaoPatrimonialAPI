@@ -1,6 +1,7 @@
 ﻿using GestaoPatrimonial.Domain.Account;
 using GestaoPatrimonial.Domain.AuthModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace GestaoPatrimonial.API.Controllers
 {
@@ -23,8 +24,8 @@ namespace GestaoPatrimonial.API.Controllers
         }
 
         [HttpGet]
-        [Route("initalUser")]
-        public ActionResult Create()
+        [Route("initialUser")]
+        public async Task<ActionResult> Create()
         {
             try
             {
@@ -35,14 +36,13 @@ namespace GestaoPatrimonial.API.Controllers
                     ConfirmPassword = "teste123",
                 };
 
-                _authenticate.RegisterUser(model);
+               await _authenticate.RegisterUser(model);
 
                 return Ok("Usuario criado");
             }
             catch (System.Exception)
             {
-
-                throw;
+                return BadRequest("Error");
             }
         }
     }
