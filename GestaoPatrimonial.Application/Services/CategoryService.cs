@@ -2,13 +2,16 @@
 using GestaoPatrimonial.Application.CqrsCategory.Commands;
 using GestaoPatrimonial.Application.CqrsCategory.Queries;
 using GestaoPatrimonial.Application.Dtos;
+using GestaoPatrimonial.Application.FilterModels.Category;
 using GestaoPatrimonial.Application.Interfaces;
 using GestaoPatrimonial.Domain.Entities;
 using GestaoPatrimonial.Domain.Utils.Models;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using GestaoPatrimonial.Application.FilterModels.Paginated;
 
 namespace GestaoPatrimonial.Application.Services
 {
@@ -23,7 +26,7 @@ namespace GestaoPatrimonial.Application.Services
             _mediator = mediator;
         }
 
-        public async Task<ResponseModel> GetAll()
+        public async Task<ResponseModel> GetAll(CategoryFilterModel filter)
         {
             try
             {
@@ -32,9 +35,12 @@ namespace GestaoPatrimonial.Application.Services
                 if (getCategoryQuery == null)
                     return new ResponseModel(500, "Erro ao buscar categoria");
 
-                IEnumerable<Category> result = await _mediator.Send(getCategoryQuery);
+                IEnumerable<Category> mediatorResult = await _mediator.Send(getCategoryQuery);
 
-                return new ResponseModel(200, _mapper.Map<IEnumerable<CategoryDto>>(result));
+                mediatorResult = filter.Name != string.Empty ? mediatorResult.Where(x => x.Name.Contains(filter.Name, StringComparison.InvariantCultureIgnoreCase)) : mediatorResult;
+
+                IEnumerable<CategoryDto> filterResult = _mapper.Map<IEnumerable<CategoryDto>>(mediatorResult);
+                return new ResponseModel(200, filterResult.Paginate(filter.PageSize, filter.Page));
             }
             catch (Exception ex)
             {
@@ -63,7 +69,7 @@ namespace GestaoPatrimonial.Application.Services
                 return new ResponseModel(500, $"Erro ao buscar categoria - {ex.Message}");
             }
         }
-        public async Task<ResponseModel> Add(CategoryDto categoryDto)
+        public async Task<ResponseModel> Create(CategoryDto categoryDto)
         {
             try
             {
