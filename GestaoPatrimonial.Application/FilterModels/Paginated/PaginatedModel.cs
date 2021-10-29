@@ -13,23 +13,25 @@ namespace GestaoPatrimonial.Application.FilterModels.Paginated
 
         public int TotalItems { get; private set; }
         public int Limit { get; private set; }
-        public int Page { get; private set; }
+        public int CurrentPage { get; private set; }
+        public int StartPage { get; private set; }
+        public int EndPage { get; private set; }
         public int TotalPages { get; private set; }
         public List<T> Objects { get; set; }
 
         internal PaginatedModel(int pageNumber, int pageSize = DEFAULT_PAGE_SIZE)
         {
             Limit = pageSize;
-            Page = pageNumber;
+            CurrentPage = pageNumber;
 
             if (Limit < 0 || Limit > MAX_PAGE_SIZE)
             {
                 Limit = DEFAULT_PAGE_SIZE;
             }
 
-            if (Page < 0)
+            if (CurrentPage < 0)
             {
-                Page = 0;
+                CurrentPage = 1;
             }
         }
 
@@ -37,21 +39,27 @@ namespace GestaoPatrimonial.Application.FilterModels.Paginated
         {
             TotalItems = list.Count();
 
-            TotalPages = (int)Math.Ceiling((decimal)TotalItems / (decimal)Limit);
+            TotalPages = (int)Math.Ceiling(TotalItems / (decimal)Limit);
+            StartPage = CurrentPage - 2;
+            EndPage = CurrentPage + 1;
 
-            if (Limit > TotalPages)
+            if (StartPage <= 0)
             {
-                Limit = TotalItems;
-                Page = Limit > 10 ? Limit - 9 : 0;
+                EndPage -= (StartPage - 1);
+                StartPage = 1;
             }
 
-            int skip = Page * Limit;
-
-            if (skip + Limit > TotalPages)
+            if (EndPage > TotalPages)
             {
-                skip = TotalPages - Limit;
-                Page = TotalPages / Limit - 1;
+                EndPage = TotalPages;
+
+                if (EndPage > Limit)
+                {
+                    StartPage = EndPage - 9;
+                }
             }
+
+            int skip = (CurrentPage - 1) * Limit;
 
             Objects = list.Skip(skip).Take(Limit).ToList();
 
