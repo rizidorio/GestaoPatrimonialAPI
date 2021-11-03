@@ -2,12 +2,15 @@
 using GestaoPatrimonial.Application.CqrsSubcategory.Commands;
 using GestaoPatrimonial.Application.CqrsSubcategory.Queries;
 using GestaoPatrimonial.Application.Dtos;
+using GestaoPatrimonial.Application.FilterModels.Paginated;
+using GestaoPatrimonial.Application.FilterModels.Subcategory;
 using GestaoPatrimonial.Application.Interfaces;
 using GestaoPatrimonial.Domain.Entities;
 using GestaoPatrimonial.Domain.Utils.Models;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GestaoPatrimonial.Application.Services
@@ -35,6 +38,30 @@ namespace GestaoPatrimonial.Application.Services
                 IEnumerable<Subcategory> result = await _mediator.Send(getSubcategoryQuery);
 
                 return new ResponseModel(200, _mapper.Map<IEnumerable<SubcategoryDto>>(result));
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao listar subcategorias - {ex.Message}");
+            }
+        }
+
+        public async Task<ResponseModel> GetAll(SubcategoryFilterModel filterModel)
+        {
+            try
+            {
+                GetSubcategoryQuery getSubcategoryQuery = new GetSubcategoryQuery();
+
+                if (getSubcategoryQuery == null)
+                    return new ResponseModel(500, "Erro ao listar subcategorias");
+
+                IEnumerable<Subcategory> mediatorResult = await _mediator.Send(getSubcategoryQuery);
+
+                mediatorResult = filterModel.Name != string.Empty ? mediatorResult.Where(x => x.Name.Contains(filterModel.Name, StringComparison.InvariantCultureIgnoreCase)) : mediatorResult;
+                mediatorResult = filterModel.CategoryId != 0 ? mediatorResult.Where(x => x.CategoryId.Equals(filterModel.CategoryId)) : mediatorResult;
+
+                IEnumerable<SubcategoryDto> filterResult = _mapper.Map<IEnumerable<SubcategoryDto>>(mediatorResult);
+
+                return new ResponseModel(200, filterResult.Paginate(filterModel.PageSize, filterModel.Page));
             }
             catch (Exception ex)
             {

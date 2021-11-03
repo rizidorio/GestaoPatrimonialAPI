@@ -26,6 +26,18 @@ namespace GestaoPatrimonial.Application.Services
             _mediator = mediator;
         }
 
+        public async Task<ResponseModel> GetAll()
+        {
+            GetCategoryQuery getCategoryQuery = new GetCategoryQuery();
+
+            if (getCategoryQuery == null)
+                return new ResponseModel(500, "Erro ao buscar categoria");
+
+            IEnumerable<Category> result = await _mediator.Send(getCategoryQuery);
+
+            return new ResponseModel(200, _mapper.Map<IEnumerable<CategoryDto>>(result));
+        }
+
         public async Task<ResponseModel> GetAll(CategoryFilterModel filter)
         {
             try
