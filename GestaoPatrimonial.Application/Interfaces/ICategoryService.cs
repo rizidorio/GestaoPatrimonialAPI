@@ -7,6 +7,7 @@ namespace GestaoPatrimonial.Application.Interfaces
 {
     public interface ICategoryService
     {
+        Task<ResponseModel> GetAll();
         Task<ResponseModel> GetAll(CategoryFilterModel filter);
         Task<ResponseModel> GetById(int id);
         Task<ResponseModel> Create(CategoryDto categoryDto);

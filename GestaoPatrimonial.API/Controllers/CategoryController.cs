@@ -29,6 +29,14 @@ namespace GestaoPatrimonial.API.Controllers
             return new ResponseController().Response(await _service.GetById(id));
         }
 
+        [HttpGet]
+        [Route("getAll")]
+        [Authorize]
+        public async Task<IActionResult> GetAll()
+        {
+            return new ResponseController().Response(await _service.GetAll());
+        }
+
         [HttpPost]
         [Route("getAll")]
         [Authorize]

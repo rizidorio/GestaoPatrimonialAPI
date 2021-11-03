@@ -1,5 +1,6 @@
 ﻿using GestaoPatrimonial.API.Utils;
 using GestaoPatrimonial.Application.Dtos;
+using GestaoPatrimonial.Application.FilterModels.Subcategory;
 using GestaoPatrimonial.Application.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -21,14 +22,6 @@ namespace GestaoPatrimonial.API.Controllers
         }
 
         [HttpGet]
-        [Route("getAll")]
-        [Authorize]
-        public async Task<IActionResult> GetAll()
-        {
-            return new ResponseController().Response(await _service.GetAll());
-        }
-
-        [HttpGet]
         [Route("{id}")]
         [Authorize]
         public async Task<IActionResult> Get(int id)
@@ -36,8 +29,24 @@ namespace GestaoPatrimonial.API.Controllers
             return new ResponseController().Response(await _service.GetById(id));
         }
 
+        [HttpGet]
+        [Route("getAll")]
+        [Authorize]
+        public async Task<IActionResult> GetAll()
+        {
+            return new ResponseController().Response(await _service.GetAll());
+        }
+
         [HttpPost]
-        [Route("add")]
+        [Route("getAll")]
+        [Authorize]
+        public async Task<IActionResult> GetAll(SubcategoryFilterModel filterModel)
+        {
+            return new ResponseController().Response(await _service.GetAll(filterModel));
+        }
+
+        [HttpPost]
+        [Route("create")]
         [Authorize]
         public async Task<IActionResult> Add(SubcategoryDto subcategoryDto)
         {
@@ -53,7 +62,7 @@ namespace GestaoPatrimonial.API.Controllers
         }
 
         [HttpDelete]
-        [Route("delete")]
+        [Route("delete/{id}")]
         [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
