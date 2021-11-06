@@ -1,5 +1,6 @@
 ﻿using GestaoPatrimonial.API.Utils;
 using GestaoPatrimonial.Application.Dtos;
+using GestaoPatrimonial.Application.FilterModels.Company;
 using GestaoPatrimonial.Application.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -21,6 +22,14 @@ namespace GestaoPatrimonial.API.Controllers
         }
 
         [HttpGet]
+        [Route("{id}")]
+        [Authorize]
+        public async Task<IActionResult> Get(int id)
+        {
+            return new ResponseController().Response(await _service.GetById(id));
+        }
+
+        [HttpGet]
         [Route("getAll")]
         [Authorize]
         public async Task<IActionResult> GetAll()
@@ -28,12 +37,12 @@ namespace GestaoPatrimonial.API.Controllers
             return new ResponseController().Response(await _service.GetAll());
         }
 
-        [HttpGet]
-        [Route("{id}")]
+        [HttpPost]
+        [Route("getAll")]
         [Authorize]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> GetAll(CompanyFilterModel filter)
         {
-            return new ResponseController().Response(await _service.GetById(id));
+            return new ResponseController().Response(await _service.GetAll(filter));
         }
 
         [HttpPost]

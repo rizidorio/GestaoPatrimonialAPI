@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace GestaoPatrimonial.Application.Dtos
@@ -48,7 +47,6 @@ namespace GestaoPatrimonial.Application.Dtos
 
         [Required(ErrorMessage = "Endereço é obrigatório")]
         public int? AddressId { get; set; }
-
 
         [MaxLength(10, ErrorMessage = "Nº do endereço deve ter até 10 caracteres")]
         [DisplayName("Nº endereço")]

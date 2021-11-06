@@ -2,12 +2,15 @@
 using GestaoPatrimonial.Application.CqrsCompany.Commands;
 using GestaoPatrimonial.Application.CqrsCompany.Queries;
 using GestaoPatrimonial.Application.Dtos;
+using GestaoPatrimonial.Application.FilterModels.Company;
+using GestaoPatrimonial.Application.FilterModels.Paginated;
 using GestaoPatrimonial.Application.Interfaces;
 using GestaoPatrimonial.Domain.Entities;
 using GestaoPatrimonial.Domain.Utils.Models;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GestaoPatrimonial.Application.Services
@@ -35,6 +38,30 @@ namespace GestaoPatrimonial.Application.Services
                 IEnumerable<Company> result = await _mediator.Send(getCompanyQuery);
 
                 return new ResponseModel(200, _mapper.Map<IEnumerable<CompanyDto>>(result));
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel(500, $"Erro ao listar empresas - {ex.Message}");
+            }
+        }
+
+        public async Task<ResponseModel> GetAll(CompanyFilterModel filter)
+        {
+            try
+            {
+                GetCompanyQuery getCompanyQuery = new GetCompanyQuery();
+
+                if (getCompanyQuery == null)
+                    return new ResponseModel(500, "Erro ao listar empresas");
+
+                IEnumerable<Company> mediatorResult = await _mediator.Send(getCompanyQuery);
+
+                mediatorResult = filter.Name != "" ? mediatorResult.Where(x => x.CorporateName.Contains(filter.Name) || x.Name.Contains(filter.Name)) : mediatorResult;
+                mediatorResult = filter.CnpjCpf != "" ? mediatorResult.Where(x => x.CnpjCpf.Equals(filter.CnpjCpf)) : mediatorResult;
+
+                IEnumerable<CompanyDto> filterResult = _mapper.Map<IEnumerable<CompanyDto>>(mediatorResult);
+
+                return new ResponseModel(200, filterResult.Paginate(filter.PageSize, filter.Page));
             }
             catch (Exception ex)
             {
