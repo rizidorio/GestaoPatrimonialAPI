@@ -46,7 +46,7 @@ namespace GestaoPatrimonial.API.Controllers
         }
 
         [HttpPost]
-        [Route("add")]
+        [Route("create")]
         [Authorize]
         public async Task<IActionResult> Add(CompanyDto companyDto)
         {

@@ -32,11 +32,11 @@ namespace GestaoPatrimonial.Application.Dtos
         [DisplayName("Nome Responsável")]
         public string ResponsibleName { get; set; }
 
-        [RegularExpression(@"[(][\d]{2}[)][\d]{4}-[\d]{4}", ErrorMessage = "Telefone inválido")]
+        [RegularExpression(@"[(][\d]{2}[)] [\d]{4}-[\d]{4}", ErrorMessage = "Telefone inválido")]
         [DisplayName("Telefone")]
         public string PhoneNumber { get; set; }
 
-        [RegularExpression(@"[(][\d]{2}[)][\d]{5}-[\d]{4}", ErrorMessage = "Celular inválido")]
+        [RegularExpression(@"[(][\d]{2}[)] [\d]{5}-[\d]{4}", ErrorMessage = "Celular inválido")]
         [DisplayName("Celular")]
         public string CellPhoneNumber { get; set; }
 
@@ -52,7 +52,7 @@ namespace GestaoPatrimonial.Application.Dtos
         [DisplayName("Nº endereço")]
         public string AddressNumber { get; set; }
 
-        [MaxLength(10, ErrorMessage = "Complemento do endereço deve ter até 80 caracteres")]
+        [MaxLength(80, ErrorMessage = "Complemento do endereço deve ter até 80 caracteres")]
         [DisplayName("Complemento endereço")]
         public string AddressComplement { get; set; }
     }

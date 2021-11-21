@@ -204,7 +204,7 @@ namespace GestaoPatrimonial.Application.Services
             }
         }
 
-        private async Task<AddressModel> GetAddressViaCep(string postalCode)
+        private static async Task<AddressModel> GetAddressViaCep(string postalCode)
         {
             string Url = string.Format(AddressUrl, postalCode.Remove(2, 1).Remove(5, 1));
 
