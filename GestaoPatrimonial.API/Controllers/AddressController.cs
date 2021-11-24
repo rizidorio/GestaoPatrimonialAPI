@@ -36,8 +36,8 @@ namespace GestaoPatrimonial.API.Controllers
             return new ResponseController().Response(await _service.GetById(id));
         }
 
-        [HttpPost]
-        [Route("getPostalCode")]
+        [HttpGet]
+        [Route("getPostalCode/{postalCode}")]
         [Authorize]
         public async Task<IActionResult> GetByPostalCode(string postalCode)
         {

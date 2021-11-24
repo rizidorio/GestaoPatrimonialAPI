@@ -32,7 +32,7 @@ namespace GestaoPatrimonial.Domain.Entities
 
         public static void PhoneValidation(string phoneNumber)
         {
-            Regex PhoneRegex = new Regex(@"(\([\d]{2}\)[\d]{4}\-[\d]{4})");
+            Regex PhoneRegex = new Regex(@"(\([\d]{2}\) [\d]{4}\-[\d]{4})");
 
             if (!string.IsNullOrEmpty(phoneNumber))
             {
@@ -42,7 +42,7 @@ namespace GestaoPatrimonial.Domain.Entities
 
         public static void CellPhoneValidation(string cellPhoneNumber)
         {
-            Regex CellPhoneRegex = new Regex(@"(\([\d]{2}\)[\d]{5}\-[\d]{4})");
+            Regex CellPhoneRegex = new Regex(@"(\([\d]{2}\) [\d]{5}\-[\d]{4})");
 
             if (!string.IsNullOrEmpty(cellPhoneNumber))
             {
