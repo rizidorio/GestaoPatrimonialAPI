@@ -62,7 +62,7 @@ namespace GestaoPatrimonial.API.Controllers
         }
 
         [HttpDelete]
-        [Route("delete")]
+        [Route("delete/{id}")]
         [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
